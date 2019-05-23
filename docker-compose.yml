@@ -1,0 +1,37 @@
+version: '3'
+services:
+  web:
+    container_name: stat_web
+    build: "web/"
+    volumes:
+      - "sound:/data"
+    networks:
+      skynet:
+        ipv4_address: 172.19.0.6
+    restart: always
+
+  api:
+    container_name: stat_api
+    build: "api/"
+    env_file: "api/db.env"
+    networks:
+      skynet:
+        ipv4_address: 172.19.0.7
+    restart: always
+  proxy:
+    container_name: stat_proxy
+    depends_on:
+      - web
+      - api
+    networks:
+      skynet:
+        ipv4_address: 172.19.0.5
+    ports:
+      - "80:80"
+    restart: always
+networks:
+  skynet:
+    ipam:
+      driver: bridge
+      config:
+        - subnet: "172.19.0.0/24"
