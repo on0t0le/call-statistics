@@ -19,6 +19,7 @@ services:
         ipv4_address: 172.19.0.7
     restart: always
   proxy:
+    build: "proxy/"
     container_name: stat_proxy
     depends_on:
       - web
